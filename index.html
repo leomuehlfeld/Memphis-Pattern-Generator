@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memphis</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <script type="text/javascript" src="js/paper-core.js"></script>
+  <script type="text/javascript">
+  paper.install(window);
+  var downloadAsSVG = function (fileName) {
+
+      if(!fileName) {
+       fileName = "pattern.svg"
+      }
+
+      var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+
+      var link = document.createElement("a");
+        link.download = fileName;
+        link.href = url;
+        link.click();
+    }
+  window.onload = function() {
+    var canvas = document.getElementById('canvas');
+    paper.setup(canvas);
+    draw();
+  }
+  window.onresize = function() {
+      draw()
+  }
+  function draw() {
+            //clear canvas
+            paper.project.activeLayer.removeChildren();
+
+            //Define Params
+            const size = 15;
+            const strokewidth = size/4;
+
+            const red = '#f44e45';
+            const blue = '#4f4faf';
+            const yellow = '#f4d65b';
+            const green = '#afe8b4';
+            const coral = '#ffe8bb';
+            const strokecolor = '#000';
+
+            const randommin = 30;
+            const randommax = 80;
+
+            var xspacing = 170;
+            var yspacing = 170;
+
+            var Objects = Array();
+
+            //---------------------------------------------------------------//
+            // DotFill
+            var dotFill = new paper.Path.Circle(0,0,size);
+                dotFill.fillColor = blue;
+
+            //Dot Outline
+            var dotOutline = new paper.Path.Circle(-7,+7,size);
+                dotOutline.strokeColor = strokecolor;
+                dotOutline.strokeWidth = strokewidth;
+
+            //Dot Group
+            var dotGroup = new paper.Group([dotFill, dotOutline]);
+
+            //Dot Symbol
+            var Dot = new paper.Symbol(dotGroup);
+
+            //Dot Push
+            Objects.push(Dot);
+            //---------------------------------------------------------------//
+
+            //---------------------------------------------------------------//
+            //Square Fill
+            var sides = 4;
+            var squareFill = new paper.Path.RegularPolygon(0,0, sides, size+5);
+                squareFill.fillColor = red;
+
+            //Square Outline
+            var squareOutline = new paper.Path.RegularPolygon(-7,+7, sides, size+5);
+                squareOutline.strokeColor = strokecolor;
+                squareOutline.strokeWidth = strokewidth;
+
+            //Square Group
+            var squareGroup = new paper.Group([squareFill, squareOutline]);
+
+            //Square Symbol
+            var Square = new paper.Symbol(squareGroup);
+
+            //Square Push
+            Objects.push(Square);
+            //---------------------------------------------------------------//
+
+            //---------------------------------------------------------------//
+            //Triangle Fill
+            var sides = 3;
+            var triangleFill = new paper.Path.RegularPolygon(0,0, sides, size+5);
+                triangleFill.fillColor = yellow;
+
+            //Triangle Outline
+            var triangleOutline = new paper.Path.RegularPolygon(+8,+8, sides, size+5);
+                triangleOutline.strokeColor = strokecolor;
+                triangleOutline.strokeWidth = strokewidth;
+
+            //Triangle Group
+            var triangleGroup = new paper.Group([triangleFill, triangleOutline]);
+            //Triangle Symbol
+            var Triangle = new paper.Symbol(triangleGroup)
+
+            //Triangle Push
+            Objects.push(Triangle);
+            //---------------------------------------------------------------//
+
+            //---------------------------------------------------------------//
+            //Line Fill
+            var from = new paper.Point(25, 5);
+            var to = new paper.Point(5, 25);
+            var lineFill = new paper.Path.Line(from, to);
+                lineFill.strokeColor = green;
+                lineFill.strokeWidth = strokewidth;
+
+            //Line Outline
+            var from = new paper.Point(20, 0);
+            var to = new paper.Point(0, 20);
+            var lineOutline = new paper.Path.Line(from, to);
+                lineOutline.strokeColor = strokecolor;
+                lineOutline.strokeWidth = strokewidth;
+
+            //Line Group
+            var lineGroup = new paper.Group([lineFill, lineOutline]);
+
+            //Line Symbol
+            var Line = new paper.Symbol(lineGroup);
+
+            //Line Push
+            Objects.push(Line);
+            //---------------------------------------------------------------//
+
+            //---------------------------------------------------------------//
+            //Zigzag Outline
+            var zigzagsize = size-7;
+            var segments = [
+                new paper.Point(0, 0),
+                new paper.Point(zigzagsize, zigzagsize),
+                new paper.Point(0, zigzagsize*2),
+                new paper.Point(zigzagsize, zigzagsize*3),
+                new paper.Point(0, zigzagsize*4),
+                new paper.Point(zigzagsize, zigzagsize*5)
+                ];
+            var zigzagOutline = new paper.Path(segments);
+
+            zigzagOutline.strokeColor = strokecolor;
+            zigzagOutline.strokeWidth = strokewidth;
+
+            //Zigzag Fil
+            var segments = [
+                new paper.Point(10, 0),
+                new paper.Point(zigzagsize+10, zigzagsize),
+                new paper.Point(10, zigzagsize*2),
+                new paper.Point(zigzagsize+10, zigzagsize*3),
+                new paper.Point(10, zigzagsize*4),
+                new paper.Point(zigzagsize+10, zigzagsize*5)
+                ];
+            var zigzagFill = new paper.Path(segments);
+
+            zigzagFill.strokeColor = coral
+            zigzagFill.strokeWidth = strokewidth;
+
+            //Zigzag Group
+            var zigzagGroup = new paper.Group([zigzagFill, zigzagOutline]);
+
+            //Zigzag Symbol
+            var Zigzag = new paper.Symbol(zigzagGroup);
+
+            //Zigzag Push
+            Objects.push(Zigzag);
+            //---------------------------------------------------------------//
+
+            //---------------------------------------------------------------//
+            //Create Point Grid Array
+            var points = Array();
+
+            //Grid Spacing
+            var rows = Math.floor((paper.view.size.height/yspacing))+2;
+            var cols = Math.floor((paper.view.size.width/xspacing))+2;
+
+            var x;
+            var y;
+
+            //Corner Offset
+            var xstart = 0;
+            var ystart = 0;
+
+            //Create Points
+            for(var row = 1; row <= rows; row++) {
+                y = ystart + (row - 1) * yspacing;
+
+                for(var col = 1; col <= cols; col++) {
+                    x = xstart + (col - 1) * xspacing;
+                    var initialPoint = new paper.Point(x, y);
+                    var xpoint = initialPoint.x+(Math.floor((Math.random() * randommax) + randommin));
+                    var ypoint = initialPoint.y+(Math.floor((Math.random() * randommax) + randommin));
+                    var finalPoint = new paper.Point(xpoint,ypoint);
+                    points.push(finalPoint);
+                }
+            }
+            //--------------------------------------------------------------------//
+
+            //--------------------------------------------------------------------//
+            //Place Objects
+            for (i = 0; i < points.length; i++) {
+              var randomObject = Objects[Math.floor(Math.random() * Objects.length)];
+              var placed = randomObject.place(points[i]);
+            }
+
+        paper.view.draw();
+        console.log('pattern created');
+    }
+    function download(){
+      console.log('start download');
+      downloadAsSVG();
+    }
+  </script>
+</head>
+
+<body>
+  <div id="legal">
+    <h1>Memphis Group Inspired Pattern Generator</h1>
+    <h2><a href="https://leomuehlfeld.at">Leo Mühlfeld</a></h2>
+  </div>
+
+  <button class="button" id="button" onclick="draw()">Get Crazy</button>
+  <button class="button" id="download" onclick="download()">Download Svg</button>
+
+  <canvas id="canvas" resize></canvas>
+  <div id="flash"></div>
+</body>
+</html>
